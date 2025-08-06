@@ -11,7 +11,7 @@ import {
 } from '../models/experience.interface';
 
 // Configuration - Update with your actual backend URL
-export const BASE_URL = 'http://your-remote-ip:your-port/api'; // Replace with your backend URL
+export const BASE_URL = 'http://localhost:3000/api'; // Replace with your backend URL
 
 @Injectable({
   providedIn: 'root'

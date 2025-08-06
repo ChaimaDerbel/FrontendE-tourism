@@ -23,9 +23,9 @@
     <div class="image-gallery">
       <div class="main-image">
         <img 
-          [src]="experience.images[selectedImageIndex] || 'assets/images/placeholder-experience.jpg'" 
+          [src]="experience.images[selectedImageIndex] || 'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg'" 
           [alt]="experience.title"
-          onerror="this.src='assets/images/placeholder-experience.jpg'"
+          onerror="this.src='https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg'"
         >
         <div class="image-navigation" *ngIf="experience.images.length > 1">
           <button mat-fab color="primary" (click)="previousImage()" class="nav-button prev">
@@ -44,7 +44,7 @@
           [alt]="experience.title + ' - Image ' + (i + 1)"
           [class.active]="i === selectedImageIndex"
           (click)="selectImage(i)"
-          onerror="this.src='assets/images/placeholder-experience.jpg'"
+          onerror="this.src='https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg'"
         >
       </div>
     </div>
