@@ -16,6 +16,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 
 // Experience Module Components
 import { ExperienceListComponent } from './components/experience-list/experience-list.component';
@@ -51,7 +54,10 @@ import { ExperienceService } from './services/experience.service';
     MatIconModule,
     MatChipsModule,
     MatPaginatorModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSlideToggleModule,
+    MatTooltipModule,
+    MatBadgeModule
   ],
   providers: [
     ExperienceService

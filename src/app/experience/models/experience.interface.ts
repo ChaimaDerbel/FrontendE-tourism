@@ -8,6 +8,8 @@ export interface Experience {
   price: number;
   currency: string;
   maxParticipants: number;
+  remainingSpots?: number;
+  totalBookings?: number;
   category: ExperienceCategory;
   difficulty: DifficultyLevel;
   images: string[];
@@ -20,6 +22,12 @@ export interface Experience {
   rating: number;
   reviewCount: number;
   isActive: boolean;
+  availability?: Date[];
+  provider?: string;
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -49,6 +57,8 @@ export interface ExperienceSearchParams {
   maxPrice?: number;
   location?: string;
   difficulty?: DifficultyLevel;
+  availability?: string;
+  minRemainingSpots?: number;
   page?: number;
   limit?: number;
 }
@@ -58,6 +68,14 @@ export interface ExperienceListResponse {
   total: number;
   page: number;
   totalPages: number;
+}
+
+export interface ExperienceStats {
+  totalExperiences: number;
+  totalBookings: number;
+  averageRating: number;
+  popularCategories: { category: string; count: number }[];
+  lowStockCount: number;
 }
 
 export interface ApiResponse<T> {

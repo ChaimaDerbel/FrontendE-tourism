@@ -1,52 +1,146 @@
-You are a senior full-stack developer specializing in Angular and Node.js applications. I need you to integrate an "Experience" module into an existing E-tourism platform frontend.
+# E-Tourism Platform - Experience Module Integration
 
-**Project Context:**
-- E-tourism platform similar to GetYourGuide/Viator
-- Frontend: Angular v14 with Angular Material
-- Backend: using Node.js/Express/TypeScript with remote vm machine 
-- Backend is deployed and fully functional on remote VM
+## Project Overview
 
-**Current Status:**
-- Backend API is working and tested via Postman
-- Frontend runs locally and connects to other modules (Flights, Hotels, Visa, ERP)
-- Experience module backend is complete but not integrated into frontend
+This is an E-tourism platform similar to GetYourGuide/Viator, built with Angular 14+ and Angular Material. The platform includes multiple modules for managing different aspects of tourism services.
 
-**Integration Requirements:**
+### Modules
+- **Dashboard** - Main overview and analytics
+- **Flights** - Flight booking and management
+- **Hotels** - Hotel reservations and management
+- **Experiences** - Tourist activities and experiences (newly integrated)
+- **Visa** - Visa application services
+- **ERP** - Enterprise resource planning
 
-1. **API Integration:**
-   - Base URL: `http://<remote-ip>:<port>/experiences`
-   - Available endpoints:
-     - GET /experiences (list all)
-     - GET /experiences/:id (get single)
-     - POST /experiences (create new)
-     - DELETE /experiences/:id (delete)
+## Experience Module Features
 
-2. **Frontend Components Needed:**
-   - Experience list component with search/filter capabilities
-   - Experience detail view component
-   - Experience creation/edit form component
-   - Integration with existing sidebar navigation
+### ✅ Complete CRUD Operations
+- Create, read, update, and delete experiences
+- Advanced search and filtering capabilities
+- Image gallery management
+- Multi-language support
 
-3. **Technical Requirements:**
-   - Create Angular service for API communication
-   - Implement proper routing for experience module
-   - Follow existing Angular Material design patterns
-   - Handle error states and loading indicators
-   - Ensure responsive design
+### 🔍 Advanced Search & Filtering
+- Filter by category, price range, location, difficulty
+- Real-time search with debouncing
+- Pagination support
+- Availability filtering
 
-4. **File Structure:**
-   ```
-   src/app/experience/
-   ├── components/
-   ├── services/
-   ├── models/
-   └── experience-routing.module.ts
-   ```
+### 📊 Analytics & Statistics
+- Popular experiences tracking
+- Low stock alerts
+- Booking statistics
+- Rating and review management
 
-**Deliverables:**
-- Complete Experience module integration
-- Proper error handling and user feedback
-- Clean, maintainable code following Angular best practices
-- Documentation for any configuration changes needed
+## Setup Instructions
 
-Please provide step-by-step implementation with code examples for each component and service.
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Configure Backend URL
+Update the backend URL in the following files:
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
+- `src/app/experience/services/experience.service.ts`
+
+Replace `http://your-remote-ip:your-port` with your actual backend URL.
+
+### 3. Backend API Endpoints
+The Experience module expects the following endpoints:
+
+```
+GET    /api/experiences          - List all experiences with filtering
+GET    /api/experiences/:id      - Get single experience
+POST   /api/experiences          - Create new experience
+PUT    /api/experiences/:id      - Update experience
+DELETE /api/experiences/:id      - Delete experience
+GET    /api/experiences/popular  - Get popular experiences
+GET    /api/experiences/low-stock - Get low stock experiences
+GET    /api/experiences/stats    - Get experience statistics
+```
+
+### 4. Run the Application
+```bash
+ng serve
+```
+
+The application will be available at `http://localhost:4200`
+
+## File Structure
+
+```
+src/app/experience/
+├── components/
+│   ├── experience-list/          # List view with search/filter
+│   ├── experience-detail/        # Detailed view of single experience
+│   └── experience-form/          # Create/edit form
+├── services/
+│   └── experience.service.ts     # API communication service
+├── models/
+│   └── experience.interface.ts   # TypeScript interfaces
+├── experience-routing.module.ts  # Module routing
+└── experience.module.ts          # Module definition
+```
+
+## Key Features
+
+### Experience List Component
+- Grid layout with responsive design
+- Advanced search and filtering
+- Pagination
+- Quick actions (edit, delete)
+- Loading states and error handling
+
+### Experience Detail Component
+- Image gallery with navigation
+- Comprehensive experience information
+- Rating display
+- Booking information
+- Responsive design
+
+### Experience Form Component
+- Reactive forms with validation
+- Dynamic form arrays for images, highlights, etc.
+- Multi-step form layout
+- Error handling and user feedback
+
+## Technical Stack
+
+- **Frontend**: Angular 14+ with Angular Material
+- **Backend**: Node.js/Express with PostgreSQL
+- **Styling**: SCSS with Material Design
+- **State Management**: RxJS Observables
+- **HTTP Client**: Angular HttpClient
+- **Forms**: Angular Reactive Forms
+
+## Configuration Notes
+
+1. **Backend Integration**: Update the `BASE_URL` in `experience.service.ts` with your backend URL
+2. **Image Handling**: The module supports image URLs. Update placeholder image paths as needed
+3. **Authentication**: Add authentication guards if required
+4. **Error Handling**: Customize error messages in the service layer
+
+## Development Guidelines
+
+- Follow Angular style guide
+- Use TypeScript strict mode
+- Implement proper error handling
+- Write responsive CSS
+- Use Angular Material components consistently
+- Implement loading states for better UX
+
+## Deployment
+
+1. Build for production:
+```bash
+ng build --prod
+```
+
+2. Update environment variables for production
+3. Deploy to your hosting platform
+
+## Support
+
+For issues or questions regarding the Experience module integration, please refer to the Angular and Angular Material documentation or contact the development team.

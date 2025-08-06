@@ -10,8 +10,8 @@ import {
   ApiResponse 
 } from '../models/experience.interface';
 
-// Configuration - Replace with your actual backend URL
-export const BASE_URL = 'http://localhost:3000/api'; // Update this with your backend URL
+// Configuration - Update with your actual backend URL
+export const BASE_URL = 'http://your-remote-ip:your-port/api'; // Replace with your backend URL
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +42,24 @@ export class ExperienceService {
       });
     }
 
-    return this.http.get<ApiResponse<ExperienceListResponse>>(this.apiUrl, { params: httpParams })
+    return this.http.get<any>(this.apiUrl, { params: httpParams })
       .pipe(
-        map(response => response.data),
+        map(response => {
+          // Handle different response formats from your backend
+          if (response.data) {
+            return response.data;
+          }
+          // If direct array response
+          if (Array.isArray(response)) {
+            return {
+              experiences: response,
+              total: response.length,
+              page: 1,
+              totalPages: 1
+            };
+          }
+          return response;
+        }),
         catchError(this.handleError),
         finalize(() => this.setLoading(false))
       );
@@ -56,9 +71,9 @@ export class ExperienceService {
   getExperienceById(id: string): Observable<Experience> {
     this.setLoading(true);
     
-    return this.http.get<ApiResponse<Experience>>(`${this.apiUrl}/${id}`)
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
       .pipe(
-        map(response => response.data),
+        map(response => response.data || response),
         catchError(this.handleError),
         finalize(() => this.setLoading(false))
       );
@@ -70,9 +85,9 @@ export class ExperienceService {
   createExperience(experience: Omit<Experience, 'id' | 'createdAt' | 'updatedAt'>): Observable<Experience> {
     this.setLoading(true);
     
-    return this.http.post<ApiResponse<Experience>>(this.apiUrl, experience)
+    return this.http.post<any>(this.apiUrl, experience)
       .pipe(
-        map(response => response.data),
+        map(response => response.data || response),
         catchError(this.handleError),
         finalize(() => this.setLoading(false))
       );
@@ -84,9 +99,9 @@ export class ExperienceService {
   updateExperience(id: string, experience: Partial<Experience>): Observable<Experience> {
     this.setLoading(true);
     
-    return this.http.put<ApiResponse<Experience>>(`${this.apiUrl}/${id}`, experience)
+    return this.http.put<any>(`${this.apiUrl}/${id}`, experience)
       .pipe(
-        map(response => response.data),
+        map(response => response.data || response),
         catchError(this.handleError),
         finalize(() => this.setLoading(false))
       );
@@ -98,9 +113,51 @@ export class ExperienceService {
   deleteExperience(id: string): Observable<void> {
     this.setLoading(true);
     
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
+    return this.http.delete<any>(`${this.apiUrl}/${id}`)
       .pipe(
         map(() => void 0),
+        catchError(this.handleError),
+        finalize(() => this.setLoading(false))
+      );
+  }
+
+  /**
+   * Get popular experiences
+   */
+  getPopularExperiences(): Observable<Experience[]> {
+    this.setLoading(true);
+    
+    return this.http.get<any>(`${this.apiUrl}/popular`)
+      .pipe(
+        map(response => response.data || response),
+        catchError(this.handleError),
+        finalize(() => this.setLoading(false))
+      );
+  }
+
+  /**
+   * Get low stock experiences
+   */
+  getLowStockExperiences(): Observable<Experience[]> {
+    this.setLoading(true);
+    
+    return this.http.get<any>(`${this.apiUrl}/low-stock`)
+      .pipe(
+        map(response => response.data || response),
+        catchError(this.handleError),
+        finalize(() => this.setLoading(false))
+      );
+  }
+
+  /**
+   * Get experience statistics
+   */
+  getExperienceStats(): Observable<any> {
+    this.setLoading(true);
+    
+    return this.http.get<any>(`${this.apiUrl}/stats`)
+      .pipe(
+        map(response => response.data || response),
         catchError(this.handleError),
         finalize(() => this.setLoading(false))
       );
