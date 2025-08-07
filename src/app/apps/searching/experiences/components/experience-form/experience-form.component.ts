@@ -95,7 +95,7 @@ export class ExperienceFormComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.showError('Failed to load experience for editing');
           console.error('Error loading experience:', error);
-          this.router.navigate(['/experiences']);
+          this.router.navigate(['/apps/searching/experiences']);
         }
       });
   }
@@ -195,7 +195,7 @@ export class ExperienceFormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (experience) => {
           this.showSuccess('Experience created successfully');
-          this.router.navigate(['/experiences', experience.id]);
+          this.router.navigate(['/apps/searching/experiences', experience.id]);
         },
         error: (error) => {
           this.showError('Failed to create experience. Please try again.');
@@ -215,7 +215,7 @@ export class ExperienceFormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (experience) => {
           this.showSuccess('Experience updated successfully');
-          this.router.navigate(['/experiences', experience.id]);
+          this.router.navigate(['/apps/searching/experiences', experience.id]);
         },
         error: (error) => {
           this.showError('Failed to update experience. Please try again.');
@@ -229,9 +229,9 @@ export class ExperienceFormComponent implements OnInit, OnDestroy {
    */
   onCancel(): void {
     if (this.isEditMode && this.experienceId) {
-      this.router.navigate(['/experiences', this.experienceId]);
+      this.router.navigate(['/apps/searching/experiences', this.experienceId]);
     } else {
-      this.router.navigate(['/experiences']);
+      this.router.navigate(['/apps/searching/experiences']);
     }
   }
 

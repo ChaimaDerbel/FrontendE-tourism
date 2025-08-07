@@ -1,10 +1,15 @@
 <div class="experience-form-container">
   <!-- Header -->
   <div class="form-header">
-    <h1>{{ isEditMode ? 'Edit Experience' : 'Create New Experience' }}</h1>
-    <p class="form-description">
-      {{ isEditMode ? 'Update the experience details below' : 'Fill in the details to create a new experience' }}
-    </p>
+    <button mat-icon-button (click)="onCancel()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-content">
+      <h1>{{ isEditMode ? 'Edit Experience' : 'Create New Experience' }}</h1>
+      <p class="form-description">
+        {{ isEditMode ? 'Update the experience details below' : 'Fill in the details to create a new experience' }}
+      </p>
+    </div>
   </div>
 
   <!-- Form -->

@@ -41,7 +41,7 @@ export class ExperienceDetailComponent implements OnInit, OnDestroy {
     
     if (!experienceId) {
       this.showError('Invalid experience ID');
-      this.router.navigate(['/experiences']);
+      this.router.navigate(['/apps/searching/experiences']);
       return;
     }
 
@@ -54,16 +54,16 @@ export class ExperienceDetailComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.showError('Failed to load experience details');
           console.error('Error loading experience:', error);
-          this.router.navigate(['/experiences']);
+          this.router.navigate(['/apps/searching/experiences']);
         }
       });
   }
 
   /**
-   * Navigate back to experiences list
+   * Navigate back to experiences search
    */
   goBack(): void {
-    this.router.navigate(['/experiences']);
+    this.router.navigate(['/apps/searching/experiences']);
   }
 
   /**
@@ -71,29 +71,7 @@ export class ExperienceDetailComponent implements OnInit, OnDestroy {
    */
   editExperience(): void {
     if (this.experience?.id) {
-      this.router.navigate(['/experiences', this.experience.id, 'edit']);
-    }
-  }
-
-  /**
-   * Delete experience with confirmation
-   */
-  deleteExperience(): void {
-    if (!this.experience?.id) return;
-
-    if (confirm(`Are you sure you want to delete "${this.experience.title}"?`)) {
-      this.experienceService.deleteExperience(this.experience.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.showSuccess('Experience deleted successfully');
-            this.router.navigate(['/experiences']);
-          },
-          error: (error) => {
-            this.showError('Failed to delete experience');
-            console.error('Error deleting experience:', error);
-          }
-        });
+      this.router.navigate(['/apps/searching/experiences', this.experience.id, 'edit']);
     }
   }
 
@@ -167,16 +145,6 @@ export class ExperienceDetailComponent implements OnInit, OnDestroy {
    */
   get isLoading(): boolean {
     return this.experienceService.loading$.value;
-  }
-
-  /**
-   * Show success message
-   */
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
   }
 
   /**

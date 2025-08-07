@@ -24,12 +24,12 @@ const routes: Routes = [
     loadChildren: () => import('./visa/visa.module').then(m => m.VisaModule)
   },
   {
-    path: 'experiences',
-    loadChildren: () => import('./experience/experience.module').then(m => m.ExperienceModule)
-  },
-  {
     path: 'erp',
     loadChildren: () => import('./erp/erp.module').then(m => m.ERPModule)
+  },
+  {
+    path: 'apps',
+    loadChildren: () => import('./apps/apps.module').then(m => m.AppsModule)
   },
   {
     path: '**',

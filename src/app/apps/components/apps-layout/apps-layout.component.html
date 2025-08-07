@@ -1,0 +1,21 @@
+<div class="apps-layout-container">
+  <!-- Header -->
+  <mat-toolbar class="apps-header">
+    <h1>Applications</h1>
+    <span class="spacer"></span>
+    <button mat-icon-button routerLink="/dashboard">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Navigation Tabs -->
+  <mat-tab-group class="apps-tabs" (selectedTabChange)="navigateTo($event.tab.textLabel.toLowerCase())">
+    <mat-tab label="Searching">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <router-outlet></router-outlet>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,0 +1,47 @@
+<div class="searching-layout-container">
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Sidebar Navigation -->
+    <mat-sidenav #drawer class="sidenav" fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="(isHandset$ | async) === false">
+      
+      <div class="sidenav-header">
+        <h3>Search Categories</h3>
+      </div>
+
+      <mat-nav-list>
+        <a 
+          *ngFor="let category of searchCategories"
+          mat-list-item 
+          [routerLink]="['/apps/searching', category.route]" 
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: false}"
+        >
+          <mat-icon matListIcon>{{ category.icon }}</mat-icon>
+          <div matLine>{{ category.name }}</div>
+          <div matLine class="category-description">{{ category.description }}</div>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <!-- Mobile Header -->
+      <mat-toolbar *ngIf="isHandset$ | async" class="mobile-toolbar">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>Search & Discovery</span>
+      </mat-toolbar>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

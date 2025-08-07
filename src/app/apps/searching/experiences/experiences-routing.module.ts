@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ExperienceListComponent } from './components/experience-list/experience-list.component';
+import { ExperienceSearchComponent } from './components/experience-search/experience-search.component';
 import { ExperienceDetailComponent } from './components/experience-detail/experience-detail.component';
 import { ExperienceFormComponent } from './components/experience-form/experience-form.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ExperienceListComponent
+    component: ExperienceSearchComponent
   },
   {
     path: 'new',
@@ -30,4 +30,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ExperienceRoutingModule { }
+export class ExperiencesRoutingModule { }

@@ -1,0 +1,75 @@
+<div class="experience-list-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading experiences...</p>
+  </div>
+
+  <!-- Experience Grid -->
+  <div *ngIf="!loading && experiences.length > 0" class="experiences-grid">
+    <mat-card 
+      *ngFor="let experience of experiences" 
+      class="experience-card"
+      (click)="onExperienceClick(experience.id!)"
+    >
+      <div class="card-image">
+        <img 
+          [src]="experience.images[0] || 'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg'" 
+          [alt]="experience.title"
+          onerror="this.src='https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg'"
+        >
+        <div class="price-badge">{{ formatPrice(experience.price, experience.currency) }}</div>
+      </div>
+
+      <mat-card-content>
+        <div class="card-header">
+          <h3>{{ experience.title }}</h3>
+          <div class="rating">
+            <mat-icon 
+              *ngFor="let star of getStarRating(experience.rating)" 
+              [class.filled]="star"
+            >
+              {{ star ? 'star' : 'star_border' }}
+            </mat-icon>
+            <span class="rating-text">{{ experience.rating }}</span>
+          </div>
+        </div>
+
+        <p class="description">{{ experience.shortDescription }}</p>
+
+        <div class="card-details">
+          <div class="detail-item">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ experience.location }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ formatDuration(experience.duration) }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>group</mat-icon>
+            <span>Max {{ experience.maxParticipants }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <mat-chip-list>
+            <mat-chip [class]="'category-' + experience.category">
+              {{ experience.category | titlecase }}
+            </mat-chip>
+            <mat-chip [class]="'difficulty-' + experience.difficulty">
+              {{ experience.difficulty | titlecase }}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && experiences.length === 0" class="empty-state">
+    <mat-icon>explore_off</mat-icon>
+    <h2>No experiences found</h2>
+    <p>Try adjusting your search criteria.</p>
+  </div>
+</div>

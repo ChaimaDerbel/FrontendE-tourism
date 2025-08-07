@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 import { ExperienceService } from '../../services/experience.service';
@@ -10,40 +9,41 @@ import {
   Experience, 
   ExperienceCategory, 
   DifficultyLevel,
-  ExperienceSearchParams,
-  ExperienceListResponse 
+  ExperienceSearchParams 
 } from '../../models/experience.interface';
 
 @Component({
-  selector: 'app-experience-list',
-  templateUrl: './experience-list.component.html',
-  styleUrls: ['./experience-list.component.scss']
+  selector: 'app-experience-search',
+  templateUrl: './experience-search.component.html',
+  styleUrls: ['./experience-search.component.scss']
 })
-export class ExperienceListComponent implements OnInit, OnDestroy {
+export class ExperienceSearchComponent implements OnInit, OnDestroy {
+  searchForm: FormGroup;
   experiences: Experience[] = [];
   totalExperiences = 0;
-  currentPage = 0;
-  pageSize = 12;
-  totalPages = 0;
+  isSearching = false;
   
-  searchForm: FormGroup;
   categories = Object.values(ExperienceCategory);
   difficulties = Object.values(DifficultyLevel);
+  
+  // Price range
+  minPrice = 0;
+  maxPrice = 1000;
   
   private destroy$ = new Subject<void>();
 
   constructor(
+    private fb: FormBuilder,
     private experienceService: ExperienceService,
     private router: Router,
-    private fb: FormBuilder,
     private snackBar: MatSnackBar
   ) {
     this.searchForm = this.createSearchForm();
   }
 
   ngOnInit(): void {
-    this.loadExperiences();
     this.setupSearchFormSubscription();
+    this.loadInitialExperiences();
   }
 
   ngOnDestroy(): void {
@@ -57,11 +57,12 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
   private createSearchForm(): FormGroup {
     return this.fb.group({
       search: [''],
+      location: [''],
       category: [''],
       difficulty: [''],
-      location: [''],
-      minPrice: [''],
-      maxPrice: ['']
+      minPrice: [this.minPrice],
+      maxPrice: [this.maxPrice],
+      availability: ['']
     });
   }
 
@@ -76,19 +77,26 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.currentPage = 0;
-        this.loadExperiences();
+        this.searchExperiences();
       });
   }
 
   /**
-   * Load experiences with current search parameters
+   * Load initial experiences
    */
-  loadExperiences(): void {
+  private loadInitialExperiences(): void {
+    this.searchExperiences();
+  }
+
+  /**
+   * Search experiences with current form values
+   */
+  searchExperiences(): void {
+    this.isSearching = true;
+    
     const searchParams: ExperienceSearchParams = {
       ...this.searchForm.value,
-      page: this.currentPage + 1,
-      limit: this.pageSize
+      limit: 20
     };
 
     // Remove empty values
@@ -102,84 +110,46 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     this.experienceService.getExperiences(searchParams)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response: ExperienceListResponse) => {
+        next: (response) => {
           this.experiences = response.experiences;
           this.totalExperiences = response.total;
-          this.totalPages = response.totalPages;
+          this.isSearching = false;
         },
         error: (error) => {
-          this.showError('Failed to load experiences. Please try again.');
-          console.error('Error loading experiences:', error);
+          this.showError('Failed to search experiences. Please try again.');
+          console.error('Error searching experiences:', error);
+          this.isSearching = false;
         }
       });
-  }
-
-  /**
-   * Handle pagination change
-   */
-  onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadExperiences();
   }
 
   /**
    * Clear all search filters
    */
   clearFilters(): void {
-    this.searchForm.reset();
-    this.currentPage = 0;
+    this.searchForm.reset({
+      search: '',
+      location: '',
+      category: '',
+      difficulty: '',
+      minPrice: this.minPrice,
+      maxPrice: this.maxPrice,
+      availability: ''
+    });
   }
 
   /**
    * Navigate to experience detail
    */
   viewExperience(experienceId: string): void {
-    this.router.navigate(['/experiences', experienceId]);
+    this.router.navigate(['/apps/searching/experiences', experienceId]);
   }
 
   /**
    * Navigate to create new experience
    */
   createExperience(): void {
-    this.router.navigate(['/experiences/new']);
-  }
-
-  /**
-   * Navigate to edit experience
-   */
-  editExperience(experienceId: string, event: Event): void {
-    event.stopPropagation();
-    this.router.navigate(['/experiences', experienceId, 'edit']);
-  }
-
-  /**
-   * Delete experience with confirmation
-   */
-  deleteExperience(experience: Experience, event: Event): void {
-    event.stopPropagation();
-    
-    if (confirm(`Are you sure you want to delete "${experience.title}"?`)) {
-      this.experienceService.deleteExperience(experience.id!)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.showSuccess('Experience deleted successfully');
-            this.loadExperiences();
-          },
-          error: (error) => {
-            this.showError('Failed to delete experience. Please try again.');
-            console.error('Error deleting experience:', error);
-          }
-        });
-    }
-  }
-
-  /**
-   * Get star rating array for display
-   */
-  getStarRating(rating: number): boolean[] {
-    return Array(5).fill(false).map((_, i) => i < Math.floor(rating));
+    this.router.navigate(['/apps/searching/experiences/new']);
   }
 
   /**
@@ -193,20 +163,26 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get loading state from service
+   * Get star rating array for display
    */
-  get isLoading(): boolean {
-    return this.experienceService.loading$.value;
+  getStarRating(rating: number): boolean[] {
+    return Array(5).fill(false).map((_, i) => i < Math.floor(rating));
   }
 
   /**
-   * Show success message
+   * Format duration display
    */
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
+  formatDuration(hours: number): string {
+    if (hours < 1) {
+      return `${hours * 60} min`;
+    } else if (hours === 1) {
+      return '1 hour';
+    } else if (hours < 24) {
+      return `${hours} hours`;
+    } else {
+      const days = Math.floor(hours / 24);
+      return `${days} day${days > 1 ? 's' : ''}`;
+    }
   }
 
   /**

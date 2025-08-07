@@ -19,20 +19,25 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSliderModule } from '@angular/material/slider';
 
-// Experience Module Components
+// Experience Components
+import { ExperienceSearchComponent } from './components/experience-search/experience-search.component';
 import { ExperienceListComponent } from './components/experience-list/experience-list.component';
 import { ExperienceDetailComponent } from './components/experience-detail/experience-detail.component';
 import { ExperienceFormComponent } from './components/experience-form/experience-form.component';
 
 // Routing
-import { ExperienceRoutingModule } from './experience-routing.module';
+import { ExperiencesRoutingModule } from './experiences-routing.module';
 
 // Services
 import { ExperienceService } from './services/experience.service';
 
 @NgModule({
   declarations: [
+    ExperienceSearchComponent,
     ExperienceListComponent,
     ExperienceDetailComponent,
     ExperienceFormComponent
@@ -41,7 +46,7 @@ import { ExperienceService } from './services/experience.service';
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
-    ExperienceRoutingModule,
+    ExperiencesRoutingModule,
     // Angular Material
     MatCardModule,
     MatButtonModule,
@@ -57,10 +62,13 @@ import { ExperienceService } from './services/experience.service';
     MatToolbarModule,
     MatSlideToggleModule,
     MatTooltipModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSliderModule
   ],
   providers: [
     ExperienceService
   ]
 })
-export class ExperienceModule { }
+export class ExperiencesModule { }

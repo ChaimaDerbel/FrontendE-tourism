@@ -2,23 +2,39 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
 }
 
 .form-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  h1 {
-    margin: 0 0 8px 0;
-    font-size: 28px;
-    font-weight: 400;
-    color: #333;
+  .back-button {
+    color: #666;
   }
 
-  .form-description {
-    margin: 0;
-    color: #666;
-    font-size: 16px;
+  .header-content {
+    flex: 1;
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      font-weight: 400;
+      color: #333;
+    }
+
+    .form-description {
+      margin: 0;
+      color: #666;
+      font-size: 16px;
+    }
   }
 }
 
@@ -32,6 +48,7 @@
 
   .form-section {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
 
     mat-card-header {
       margin-bottom: 16px;
@@ -140,8 +157,10 @@
   display: flex;
   justify-content: flex-end;
   gap: 16px;
-  padding: 20px 0;
-  border-top: 1px solid #e0e0e0;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   .cancel-button {
     min-width: 120px;
@@ -180,8 +199,14 @@
     padding: 16px;
   }
 
-  .form-header h1 {
-    font-size: 24px;
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    .header-content h1 {
+      font-size: 24px;
+    }
   }
 
   .experience-form {
@@ -229,7 +254,7 @@
   .form-header {
     margin-bottom: 20px;
 
-    h1 {
+    .header-content h1 {
       font-size: 20px;
     }
 
@@ -245,7 +270,7 @@
 
 // Custom Material Design overrides
 .mat-card {
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .mat-form-field-appearance-outline {
@@ -262,17 +287,4 @@
 .mat-stroked-button {
   border-radius: 6px;
   font-weight: 500;
-}
-
-// Success/Error snackbar styles (global)
-:host ::ng-deep {
-  .success-snackbar {
-    background-color: #4caf50;
-    color: white;
-  }
-
-  .error-snackbar {
-    background-color: #f44336;
-    color: white;
-  }
 }
